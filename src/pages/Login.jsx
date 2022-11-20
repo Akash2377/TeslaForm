@@ -1,30 +1,13 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { isLoginSuccess } from "../Redux/action";
+import { isLoginSuccess, checkAuth } from "../Redux/action";
 import { Link } from "react-router-dom";
 const Login = () => {
   const [loginData, setLoginData] = React.useState({ email: "", password: "" });
   const { email, password } = loginData;
   const navigator = useNavigate();
   const dispatch = useDispatch();
-  const checkAuth = () => {
-    fetch(`https://reqres.in/api/login`, {
-      method: "POST",
-      body: JSON.stringify(loginData),
-      headers: { "content-type": "application/json" },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.token) {
-          dispatch(isLoginSuccess(true));
-          navigator("/admin");
-          return;
-        } else {
-          alert("Wrong Credentials");
-        }
-      });
-  };
 
   const handleChange = (e) => {
     let { name, value } = e.target;
@@ -56,7 +39,7 @@ const Login = () => {
           placeholder="Enter your password"
           onChange={handleChange}
         />
-        <button onClick={checkAuth} style={btn}>
+        <button onClick={dispatch(checkAuth())} style={btn}>
           Login
         </button>
       </div>
