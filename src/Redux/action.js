@@ -27,3 +27,22 @@ export const userLoginSuccess = (payload) => ({
   type: type.USER_LOGIN_SUCCESS,
   payload,
 });
+export const checkAuth = () => {
+  return function (dispatch) {
+    fetch(`https://reqres.in/api/login`, {
+      method: "POST",
+      body: JSON.stringify(loginData),
+      headers: { "content-type": "application/json" },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.token) {
+          dispatch(isLoginSuccess(true));
+          navigator("/admin");
+          return;
+        } else {
+          alert("Wrong Credentials");
+        }
+      });
+  };
+};
